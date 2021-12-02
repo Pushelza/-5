@@ -1,0 +1,183 @@
+# Задание 1 Создать программно файл в текстовом формате,
+# записать в него построчно данные, вводимые пользователем.
+# Об окончании ввода данных свидетельствует пустая строка.
+print('Задание1')
+my_file = open('пример.txt', 'w')
+line = input('Введите текст: ')
+while line:
+    my_file.write(line + '\n')
+    line = input('Введите текст: ')
+    if not line:
+        break
+
+my_file.close()
+try:
+    with open('пример.txt') as my_file:
+        print('Содержимое файла' + '\n')
+        for lines in my_file:
+            print(lines.replace('\n', ''))
+except IOError:
+    print("Обнаружена ошибка связанная с выводом: ")
+
+my_file.close() #на всякий случай
+print('Задание 1 Выполнено')
+
+# Задание 2 Создать текстовый файл (не программно), сохранить в нем несколько строк,
+# выполнить подсчет количества строк, количества слов в каждой строке.
+print('Задание 2')
+my_file = open('пример.txt', 'r')
+content = my_file.read()
+print(f'Содержимое файла: \n {content}')
+my_file = open('пример.txt', 'r')
+content = my_file.readlines()
+print(f'Строк в файле - {len(content)}')
+my_file = open('пример.txt', 'r')
+content = my_file.readlines()
+for i in range(len(content)):
+    print(f'Символов в {i + 1} строке {len(content[i])}')
+my_file = open('пример.txt', 'r')
+content = my_file.read()
+content = content.split()
+print(f'Всего слов - {len(content)}')
+my_file.close()
+print('Задание 2 Выполнено')
+# Задание 3 Создать текстовый файл (не программно),
+# построчно записать фамилии сотрудников и величину их окладов
+# (не менее 10 строк). Определить, кто из сотрудников имеет
+# оклад менее 20 тыс., вывести фамилии этих сотрудников.
+# Выполнить подсчет средней величины дохода сотрудников.
+print('Задание 3')
+import codecs
+
+line_count = 1
+
+my_file = codecs.open('staff.txt', 'r')
+var1 = my_file.read()
+
+var2 = var1.split('\n')
+
+salary = 0
+print('Сотрудники с ЗП менее 20 000 рублей:')
+for i in var2:
+    list = i.replace('\r', '').split(" ")
+
+    if int(float(list[1])) < 20000:
+        print(list[0])
+    salary += int(float(list[1]))
+
+print(f"Средняя зарплата сотрудников: {salary / len(var2)-1}")
+print('Задание 3 Выполнено, но ....')
+# Задание 4 Создать (не программно) текстовый файл со следующим содержимым:
+# One — 1
+# Two — 2
+# Three — 3
+# Four — 4
+#
+# Необходимо написать программу, открывающую файл на чтение и считывающую
+# построчно данные. При этом английские числительные должны заменяться
+# на русские. Новый блок строк должен записываться в новый текстовый файл.
+print('Задание 4')
+def my_file():
+    words = {'One': 'Один', 'Two': 'Два', 'Three': 'Три', 'Four': 'Четыре'}
+    new_text = []
+    try:
+        with open('Ex_4.txt', 'r') as file:
+            with open('Ex_4_new.txt', 'r') as new_file:
+                l = file.readlines()
+                for i in l:
+                    i = i.split(' ', 1)
+                    new_text.append(num[i[0]] + ' ' + i[1])
+                new_file.writelines(new_text)
+    except FileNotFoundError:
+        return 'Файл не найден.'
+
+my_file()
+my_file = open('task4_dst.txt')
+for line in my_file.readlines():
+    print(line.replace('\n', ''))
+my_file.close()
+print('Задание 4 Выполнено')
+
+# Задание 5 Создать (программно) текстовый файл, записать в него программно
+# набор чисел, разделенных пробелами.
+# Программа должна подсчитывать сумму чисел в файле и выводить ее на экран.
+print('Задание 5')
+def sum_num():
+    try:
+        with open('number.txt', 'w+') as file_num:
+            line = input('Введите цифры через пробел:')
+            file_num.writelines(line)
+            my_numb = line.split()
+
+            print(sum(map(int, my_numb)))
+    except IOError:
+        print('Ошибка в файле')
+    except ValueError:
+        print('Ошибка!')
+sum_num()
+print('Задание 5 Выполнено')
+# Задание 6 Необходимо создать (не программно) текстовый файл,
+# где каждая строка описывает учебный предмет и наличие лекционных,
+# практических и лабораторных занятий по этому предмету и их количество.
+# Важно, чтобы для каждого предмета не обязательно были все типы занятий.
+# Сформировать словарь, содержащий название предмета и общее количество
+# занятий по нему. Вывести словарь на экран.
+# Примеры строк файла: Информатика: 100(л) 50(пр) 20(лаб).
+# Физика: 30(л) — 10(лаб)
+# Физкультура: — 30(пр) —
+# Пример словаря: {“Информатика”: 170, “Физика”: 40, “Физкультура”: 30}
+print('Задание 6')
+def all_subj():
+    try:
+        this_dict = {}
+        with open('study.txt', encoding='utf-8') as subj:
+            for line in subj:
+                name, stats = line.split(':')
+                name_sum = sum(map(int, ''.join([i for i in stats if i == ' ' or ('0' <= i <= '9')]).split()))
+                this_dict[name] = name_sum
+            print(f"{this_dict}")
+    except FileNotFoundError:
+        return 'Файл не найден.'
+
+all_subj()
+print('Задание 6 Выполнено')
+
+# Задание 7 Создать вручную и заполнить несколькими строками текстовый файл,
+# в котором каждая строка должна содержать данные о фирме: название,
+# форма собственности, выручка, издержки.
+# Необходимо построчно прочитать файл, вычислить прибыль каждой компании,
+# а также среднюю прибыль. Если фирма получила убытки, в расчет средней
+# прибыли ее не включать. Далее реализовать список. Он должен содержать
+# словарь с фирмами и их прибылями, а также словарь со средней прибылью.
+# Если фирма получила убытки, также добавить ее в словарь (со значением убытков).
+# Итоговый список сохранить в виде json-объекта в соответствующий файл.
+
+print('Задание 7')
+import json
+profit = {}
+pr = {}
+prof = 0
+prof_aver = 0
+i = 0
+with open('company.txt', 'r') as file:
+    for line in file:
+        name, firm, earning, damage = line.split()
+        profit[name] = int(earning) - int(damage)
+        if profit.setdefault(name) >= 0:
+            prof = prof + profit.setdefault(name)
+            i += 1
+    if i != 0:
+        prof_aver = prof / i
+        print(f'Средняя прибыль - {prof_aver:.2f}')
+    else:
+        print(f'Нет прибыли. Работают в убыток')
+    pr = {'средняя прибыль': round(prof_aver)}
+    profit.update(pr)
+    print(f'Прибыль по каждой компании - {profit}')
+
+with open('company.json', 'w') as com_js:
+    json.dump(profit, com_js)
+
+    js_com = json.dumps(profit)
+    print(f'Создан файл (json). Содержимое: {js_com}')
+print('Задание 7 Выполнено')
